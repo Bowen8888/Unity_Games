@@ -7,14 +7,14 @@ public class Agent : MonoBehaviour
 {
 	public GameObject goal1;
 	public GameObject goal2;
-	private NavMeshAgent _navMeshAgent;
 	public float speed;
-	
+	public float rotateSpeed;
+
+	private Rigidbody _rigidbody;
 	// Use this for initialization
 	void Start ()
 	{
-		_navMeshAgent = GetComponent<NavMeshAgent>();
-		_navMeshAgent.SetDestination(goal1.transform.position);
+		_rigidbody = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -27,20 +27,33 @@ public class Agent : MonoBehaviour
 	{		
 		if(Input.GetKey(KeyCode.W))
 		{
-			_navMeshAgent.Move(Vector3.forward*Time.deltaTime*speed);
+			Move(Vector3.forward*Time.deltaTime*speed);
 		}
 		if(Input.GetKey(KeyCode.S))
 		{
-			_navMeshAgent.Move(Vector3.back*Time.deltaTime*speed);
+			Move(Vector3.back*Time.deltaTime*speed);
 		}
 		if(Input.GetKey(KeyCode.A))
 		{
-			_navMeshAgent.Move(Vector3.left*Time.deltaTime*speed);
+			Move(Vector3.left*Time.deltaTime*speed);
 		}
 		if(Input.GetKey(KeyCode.D))
 		{
-			_navMeshAgent.Move(Vector3.right*Time.deltaTime*speed);
+			Move(Vector3.right*Time.deltaTime*speed);
 		}
 
+	}
+
+	private void FixedUpdate()
+	{
+		_rigidbody.velocity = transform.forward * speed;
+
+		var rotation = Quaternion.LookRotation(goal2.transform.position - transform.position);
+		_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,rotateSpeed));
+	}
+
+	private void Move(Vector3 vector3)
+	{
+		_rigidbody.AddForce(vector3);
 	}
 }

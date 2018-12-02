@@ -14,10 +14,8 @@ public class ObstacleGenerator : MonoBehaviour
 	{
 		for (int i = 0; i < N; i++)
 		{
-			//GenerateObstacle(Random.Range(-20,20), Random.Range(-20,20));			
+			GenerateObstacle(Random.Range(-20,20), Random.Range(-20,20));			
 		}
-		
-		GenerateObstacle(0,0);
 	}
 	
 	// Update is called once per frame
@@ -44,7 +42,7 @@ public class ObstacleGenerator : MonoBehaviour
 		GenerateSideWings(obstacleContainer,obstacleX,obstacleZ,height,width,2);
 
 		obstacleContainer.transform.rotation = Quaternion.Euler(0,Random.Range(0,360),0);
-		obstacleContainer.transform.position = new Vector3(containerPositionX,2,containerPositionZ);
+		obstacleContainer.transform.position = new Vector3(containerPositionX,0,containerPositionZ);
 	}
 
 	private void GenerateSideWings(GameObject obstacleContainer, float obstacleX, float obstacleZ, float height, float width,int sideIndex)
