@@ -23,6 +23,7 @@ public class ObstacleGenerator : MonoBehaviour
 			{
 				if (Vector3.Distance(obstacle.transform.position, new Vector3(xCord, 2, zCord)) < 12)
 				{
+					canPlace = false;
 					break;
 				}
 			}
