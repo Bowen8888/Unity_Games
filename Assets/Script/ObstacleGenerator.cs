@@ -12,9 +12,32 @@ public class ObstacleGenerator : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		for (int i = 0; i < N; i++)
+		int count = 0;
+		while (count < N)
 		{
-			GenerateObstacle(Random.Range(-20,20), Random.Range(-20,20));			
+			float xCord = Random.Range(-20, 20);
+			float zCord = Random.Range(-20, 20);
+			bool canPlace = true;
+			GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+			foreach (var obstacle in obstacles)
+			{
+				if (Vector3.Distance(obstacle.transform.position, new Vector3(xCord, 2, zCord)) < 12)
+				{
+					break;
+				}
+			}
+
+			if (canPlace)
+			{
+				GenerateObstacle(xCord, zCord);
+				count++;
+			}
+
+			float time = Time.time;
+			if (time > 5)
+			{
+				break;
+			}
 		}
 	}
 	
@@ -50,8 +73,8 @@ public class ObstacleGenerator : MonoBehaviour
 		if (rnd.NextDouble() < 0.5)
 		{
 			GameObject side = Instantiate(objectPrefab,new Vector3(0,2,0), Quaternion.identity);
-			float sideWidth = (float) (rnd.NextDouble() * 5 + 2);
-			float sideHeight = (float) (rnd.NextDouble() * 5 + 2);
+			float sideWidth = (float) (rnd.NextDouble() * 3 + 2);
+			float sideHeight = (float) (rnd.NextDouble() * 3 + 2);
 			side.transform.localScale = new Vector3(sideWidth, 4, sideHeight);
 			bool positive = rnd.NextDouble() < 0.5;
 			float shiftOffset = (float) rnd.NextDouble();

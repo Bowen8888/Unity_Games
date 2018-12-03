@@ -21,7 +21,6 @@ public class Agent : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		GetInput();
 	}
 
 	private void GetInput()
@@ -42,7 +41,6 @@ public class Agent : MonoBehaviour
 		{
 			Move(Vector3.right*Time.deltaTime*speed);
 		}
-
 	}
 
 	private void FixedUpdate()
@@ -64,15 +62,27 @@ public class Agent : MonoBehaviour
 		foreach (var obstacle in obstacles)
 		{
 			float distance = Vector3.Distance(transform.position, obstacle.transform.position);
-			if (distance < 8)
+			if (distance < 5)
 			{
 				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
-				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (rotateSpeed/Math.Pow(2,distance/4))));
+				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (rotateSpeed/Math.Pow(2,distance/5))));
 				toggle = true;
 			}
 		}
 
 		return toggle;
+	}
+
+	private void ReacToWalls()
+	{
+		if (transform.position.z < -17 || transform.position.z > 19)
+		{
+			Vector3 target = transform.position;
+			target.z = (transform.position.z < -17) ? -18 : 20;
+			var rotation = Quaternion.LookRotation(transform.position - target);
+			var distance = transform.position.z - target.z;
+			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (rotateSpeed)));
+		}
 	}
 	
 	private void Move(Vector3 vector3)
