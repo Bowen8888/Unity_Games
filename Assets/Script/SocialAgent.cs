@@ -36,12 +36,12 @@ public class SocialAgent : MonoBehaviour {
 			return;
 		}
 
-		GameObject closestSocialAgent = ClosestSocialAgentAround();
+		GameObject socialAgentAround = SocialAgentAround();
 		
-		if (closestSocialAgent != null && !closestSocialAgent.GetComponent<SocialAgent>()._talking)
+		if (socialAgentAround != null)
 		{
-			Vector3 desired_velocity = closestSocialAgent.transform.position - transform.position;
-			var distance = desired_velocity.magnitude;
+			Vector3 desiredVelocity = socialAgentAround.transform.position - transform.position;
+			var distance = desiredVelocity.magnitude;
 			var slowingRange = 4;
 		
 			if (distance < 2)
@@ -51,11 +51,11 @@ public class SocialAgent : MonoBehaviour {
 			}
 			else if(distance < slowingRange)
 			{
-				_rigidbody.velocity = Vector3.Normalize(desired_velocity) * speed * distance/slowingRange ;
+				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * speed * distance/slowingRange ;
 			}
 			else
 			{
-				_rigidbody.velocity = Vector3.Normalize(desired_velocity) * speed;
+				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * speed;
 			}
 		}
 		else
@@ -84,7 +84,7 @@ public class SocialAgent : MonoBehaviour {
 		}
 	}
 
-	private GameObject ClosestSocialAgentAround()
+	private GameObject SocialAgentAround()
 	{
 		var viewRange = 5;
 		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("SocialAgent");

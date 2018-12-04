@@ -10,7 +10,7 @@ public class ObstacleGenerator : MonoBehaviour
 	private System.Random rnd = new System.Random();
 	
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 		int count = 0;
 		while (count < N)
