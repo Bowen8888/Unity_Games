@@ -9,6 +9,7 @@ TagManager:
   - SocialAgent
   - Doorway
   - Traveller
+  - WanderAgent
   layers:
   - Default
   - TransparentFX

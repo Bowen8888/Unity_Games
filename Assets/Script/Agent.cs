@@ -49,8 +49,9 @@ public class Agent : MonoBehaviour
 	{		
 		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 		GameObject[] travellers = GameObject.FindGameObjectsWithTag("SocialAgent");
+		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
 
-		return ReactToObstacles(obstacles, 5) || ReactToObstacles(travellers, 2);
+		return ReactToObstacles(obstacles, 5) || ReactToObstacles(travellers, 2) || ReactToObstacles(wanderAgents, 2);
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)

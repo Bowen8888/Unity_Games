@@ -46,7 +46,6 @@ public class WSagent : MonoBehaviour
 		{
 			_rigidbody.velocity = transform.forward * speed;
 		}
-		
 
 		if (!ReactToObstacles())
 		{
@@ -66,11 +65,30 @@ public class WSagent : MonoBehaviour
 			if (distance < 5)
 			{
 				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
-				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (rotateSpeed/Math.Pow(2,distance/4))));
+				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (rotateSpeed/distance)));
 				toggle = true;
 			}
 		}
 
 		return toggle;
+	}
+	
+	private GameObject TravelerAround()
+	{
+		var viewRange = 5;
+		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("Traveler");
+		foreach (var socialAgent in socialAgents)
+		{
+			if (!socialAgent.Equals(gameObject))
+			{
+				var distance = Vector3.Distance(transform.position, socialAgent.transform.position);
+				if (distance < viewRange)
+				{
+					return socialAgent;
+				}
+			}
+		}
+
+		return null;
 	}
 }
