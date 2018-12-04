@@ -10,6 +10,7 @@ public class WSagent : MonoBehaviour
 	private float _speed;
 	private float _rotateSpeed;  
 	private Vector3 destination;
+	private GameObject _target;
 
 	// Use this for initialization
 	void Start () {
@@ -17,6 +18,7 @@ public class WSagent : MonoBehaviour
 		_speed = Random.Range(5, 10);
 		_rotateSpeed = 10;
 		_rigidbody = GetComponent<Rigidbody>();
+		_target = null;
 	}
 	
 	// Update is called once per frame
@@ -32,21 +34,20 @@ public class WSagent : MonoBehaviour
 	
 	private void FixedUpdate()
 	{
-		var distance = Vector3.Distance(transform.position, destination);
-		var slowingRange = 4;
-		if (distance < 0.5 || Physics.CheckSphere(destination, 3))
+		if (_target != null)
+		{
+			Vector3 targetDestination = _target.GetComponent<Agent>().GetDestination();
+			destination = Vector3.Normalize(targetDestination - _target.transform.position)*2 + _target.transform.position;
+		}
+		else if (Vector3.Distance(transform.position, destination) < 0.5 || Physics.CheckSphere(destination, 3))
 		{
 			UpdateDestination();
 			Debug.Log("new destination " + destination);
 		}
-		else if(distance < slowingRange)
-		{
-			_rigidbody.velocity = transform.forward * _speed * distance/slowingRange ;
-		}
-		else
-		{
-			_rigidbody.velocity = transform.forward * _speed;
-		}
+
+		CheckTravelerAround();
+		
+		_rigidbody.velocity = transform.forward * _speed;
 
 		if (!ReactToObstacles())
 		{
@@ -87,22 +88,18 @@ public class WSagent : MonoBehaviour
 		return toggle;
 	}
 	
-	private GameObject TravelerAround()
+	private void CheckTravelerAround()
 	{
 		var viewRange = 5;
-		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("Traveler");
-		foreach (var socialAgent in socialAgents)
+		GameObject[] travelers = GameObject.FindGameObjectsWithTag("Traveler");
+		foreach (var traveler in travelers)
 		{
-			if (!socialAgent.Equals(gameObject))
+			var distance = Vector3.Distance(transform.position, traveler.transform.position);
+			if (distance < viewRange)
 			{
-				var distance = Vector3.Distance(transform.position, socialAgent.transform.position);
-				if (distance < viewRange)
-				{
-					return socialAgent;
-				}
+				_target = traveler;
+				return;
 			}
 		}
-
-		return null;
 	}
 }

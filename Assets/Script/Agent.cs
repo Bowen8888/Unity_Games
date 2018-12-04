@@ -40,7 +40,7 @@ public class Agent : MonoBehaviour
 
 		if (!ReactToObstacles())
 		{
-			var rotation = Quaternion.LookRotation((_chosenGoal1?_doorways[0].transform.position : _doorways[1].transform.position) - transform.position);
+			var rotation = Quaternion.LookRotation(GetDestination() - transform.position);
 			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed));
 		}
 	}
@@ -85,5 +85,10 @@ public class Agent : MonoBehaviour
 			GameObject.FindGameObjectWithTag("AgentGenerator").GetComponent<AgentGenerator>().GenerateTravelerAgent();
 			Destroy(gameObject);
 		}
+	}
+
+	public Vector3 GetDestination()
+	{
+		return (_chosenGoal1 ? _doorways[0].transform.position : _doorways[1].transform.position);
 	}
 }
