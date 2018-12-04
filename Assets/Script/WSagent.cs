@@ -58,10 +58,10 @@ public class WSagent : MonoBehaviour
 	private bool ReactToObstacles()
 	{		
 		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-//		GameObject[] travellers = GameObject.FindGameObjectsWithTag("SocialAgent");
+		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("SocialAgent");
 		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
 
-		return ReactToObstacles(obstacles, 5) || ReactToObstacles(wanderAgents, 2);
+		return ReactToObstacles(obstacles, 5) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(socialAgents, 2);
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
