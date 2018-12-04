@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class AgentGenerator : MonoBehaviour
 {
-	public GameObject socialAgentPrefab;
-	public int socialAgentAmount;
+	public GameObject SocialAgentPrefab;
+	public int SocialAgentAmount;
 	public GameObject TravellerAgentPrefab;
 	public int TravellerAgentAmount;
+	public GameObject WanderAgentPrefab;
+	public int WanderAgentAmount;
 	
 	// Use this for initialization
 	void Start () {
@@ -19,7 +21,15 @@ public class AgentGenerator : MonoBehaviour
 		}
 		
 		//Generate Social Agent
-		for (int i = 0; i < socialAgentAmount; i++)
+		SpawnAtRandomPosition(SocialAgentPrefab, SocialAgentAmount);
+		
+		//Generate Wander Agent
+		SpawnAtRandomPosition(WanderAgentPrefab, WanderAgentAmount);
+	}
+
+	private void SpawnAtRandomPosition(GameObject prefab, int N)
+	{
+		for (int i = 0; i < N; i++)
 		{
 			float xCord = Random.Range(-30, 30);
 			float zCord = Random.Range(-18, 18);
@@ -31,7 +41,7 @@ public class AgentGenerator : MonoBehaviour
 				spawnPos = new Vector3(xCord, 0.5f, zCord);
 			}
 
-			Instantiate(socialAgentPrefab, spawnPos, Quaternion.identity);
+			Instantiate(prefab, spawnPos, Quaternion.identity);
 		}
 	}
 	

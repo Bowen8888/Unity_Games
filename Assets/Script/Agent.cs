@@ -46,17 +46,24 @@ public class Agent : MonoBehaviour
 	}
 
 	private bool ReactToObstacles()
+	{		
+		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+//		GameObject[] travellers = GameObject.FindGameObjectsWithTag("Traveller");
+
+		return ReactToObstacles(obstacles);
+	}
+
+	private bool ReactToObstacles(GameObject[] obstacles)
 	{
 		bool toggle = false;
-		
-		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+				
 		foreach (var obstacle in obstacles)
 		{
 			float distance = Vector3.Distance(transform.position, obstacle.transform.position);
 			if (distance < 5)
 			{
 				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
-				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (_rotateSpeed/distance)));
+				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
 				toggle = true;
 			}
 		}
