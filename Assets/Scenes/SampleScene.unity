@@ -145,10 +145,10 @@ MonoBehaviour:
   SocialAgentAmount: 0
   TravellerAgentPrefab: {fileID: 1332659736153406, guid: aa0b4a8681e774f2ea9c4888f1e8c61d,
     type: 2}
-  TravellerAgentAmount: 1
+  TravellerAgentAmount: 10
   WanderAgentPrefab: {fileID: 1249240370757862, guid: 853b474a7a13c4e9499c65034988e6f1,
     type: 2}
-  WanderAgentAmount: 15
+  WanderAgentAmount: 0
 --- !u!4 &75432734
 Transform:
   m_ObjectHideFlags: 0
@@ -377,8 +377,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 449391330}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.75}
-  m_LocalScale: {x: 7.184209, y: 1, z: 4.225753}
+  m_LocalPosition: {x: 0, y: -0, z: 0.6}
+  m_LocalScale: {x: 7.184209, y: 1, z: 4.1416607}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -887,7 +887,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4511526342836846, guid: aa11a940dcc144fc19c8035758e1346f, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 11.25
+      value: 11.3
       objectReference: {fileID: 0}
     - target: {fileID: 4511526342836846, guid: aa11a940dcc144fc19c8035758e1346f, type: 2}
       propertyPath: m_LocalRotation.x

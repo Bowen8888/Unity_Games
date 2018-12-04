@@ -48,10 +48,11 @@ public class Agent : MonoBehaviour
 	private bool ReactToObstacles()
 	{		
 		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-		GameObject[] travellers = GameObject.FindGameObjectsWithTag("SocialAgent");
+		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("SocialAgent");
 		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
+		GameObject[] travelers = GameObject.FindGameObjectsWithTag("Traveler");
 
-		return ReactToObstacles(obstacles, 5) || ReactToObstacles(travellers, 2) || ReactToObstacles(wanderAgents, 2);
+		return ReactToObstacles(obstacles, 5) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
@@ -60,6 +61,11 @@ public class Agent : MonoBehaviour
 				
 		foreach (var obstacle in obstacles)
 		{
+			if (obstacle == gameObject)
+			{
+				continue;
+			}
+			
 			float distance = Vector3.Distance(transform.position, obstacle.transform.position);
 			if (distance < avoidDist)
 			{

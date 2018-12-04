@@ -8,8 +8,8 @@ TagManager:
   - Wall
   - SocialAgent
   - Doorway
-  - Traveller
   - WanderAgent
+  - Traveler
   layers:
   - Default
   - TransparentFX

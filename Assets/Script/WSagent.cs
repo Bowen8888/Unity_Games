@@ -7,14 +7,15 @@ using Random = UnityEngine.Random;
 public class WSagent : MonoBehaviour
 {
 	private Rigidbody _rigidbody;
-	public float speed;
-	public float rotateSpeed;  
+	private float _speed;
+	private float _rotateSpeed;  
 	private Vector3 destination;
-	
+
 	// Use this for initialization
 	void Start () {
 		UpdateDestination();
-//		destination = new Vector3(-30,0.5f,-10);
+		_speed = Random.Range(5, 10);
+		_rotateSpeed = 10;
 		_rigidbody = GetComponent<Rigidbody>();
 	}
 	
@@ -40,32 +41,45 @@ public class WSagent : MonoBehaviour
 		}
 		else if(distance < slowingRange)
 		{
-			_rigidbody.velocity = transform.forward * speed * distance/slowingRange ;
+			_rigidbody.velocity = transform.forward * _speed * distance/slowingRange ;
 		}
 		else
 		{
-			_rigidbody.velocity = transform.forward * speed;
+			_rigidbody.velocity = transform.forward * _speed;
 		}
 
 		if (!ReactToObstacles())
 		{
 			var rotation = Quaternion.LookRotation(destination - transform.position);
-			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,rotateSpeed));
+			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed));
 		}
 	}
 
 	private bool ReactToObstacles()
+	{		
+		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+//		GameObject[] travellers = GameObject.FindGameObjectsWithTag("SocialAgent");
+		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
+
+		return ReactToObstacles(obstacles, 5) || ReactToObstacles(wanderAgents, 2);
+	}
+
+	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
 	{
 		bool toggle = false;
-		
-		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+				
 		foreach (var obstacle in obstacles)
 		{
+			if (obstacle == gameObject)
+			{
+				continue;
+			}
+			
 			float distance = Vector3.Distance(transform.position, obstacle.transform.position);
-			if (distance < 5)
+			if (distance < avoidDist)
 			{
 				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
-				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (rotateSpeed/distance)));
+				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
 				toggle = true;
 			}
 		}
