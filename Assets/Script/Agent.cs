@@ -1,56 +1,47 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
+using Random = System.Random;
 
 public class Agent : MonoBehaviour
 {
-	public GameObject goal1;
-	public GameObject goal2;
-	public float speed;
-	public float rotateSpeed;
+	private GameObject[] _doorways;
+	public float _speed;
+	private float _rotateSpeed;
+	private bool _chosenGoal1;
+	private float _nextActionTime = 0.0f;
+	private float _period = 5;
 
 	private Rigidbody _rigidbody;
 	// Use this for initialization
 	void Start ()
 	{
+		var rnd = new Random();
+		
 		_rigidbody = GetComponent<Rigidbody>();
+		_speed = UnityEngine.Random.Range(5, 10);
+		_rotateSpeed = 10;
+		_chosenGoal1 = rnd.NextDouble() < 0.5;
+		_doorways = GameObject.FindGameObjectsWithTag("Doorway");
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-	}
-
-	private void GetInput()
-	{		
-		if(Input.GetKey(KeyCode.W))
+		if (Time.time > _nextActionTime)
 		{
-			Move(Vector3.forward*Time.deltaTime*speed);
-		}
-		if(Input.GetKey(KeyCode.S))
-		{
-			Move(Vector3.back*Time.deltaTime*speed);
-		}
-		if(Input.GetKey(KeyCode.A))
-		{
-			Move(Vector3.left*Time.deltaTime*speed);
-		}
-		if(Input.GetKey(KeyCode.D))
-		{
-			Move(Vector3.right*Time.deltaTime*speed);
+			_nextActionTime += _period;
+			_chosenGoal1 = !_chosenGoal1;
 		}
 	}
 
 	private void FixedUpdate()
 	{
-		_rigidbody.velocity = transform.forward * speed;
+		_rigidbody.velocity = transform.forward * _speed;
 
 		if (!ReactToObstacles())
 		{
-			var rotation = Quaternion.LookRotation(goal2.transform.position - transform.position);
-			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,rotateSpeed));
+			var rotation = Quaternion.LookRotation((_chosenGoal1?_doorways[0].transform.position : _doorways[1].transform.position) - transform.position);
+			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed));
 		}
 	}
 
@@ -65,7 +56,7 @@ public class Agent : MonoBehaviour
 			if (distance < 5)
 			{
 				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
-				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (rotateSpeed/Math.Pow(2,distance/5))));
+				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (_rotateSpeed/distance)));
 				toggle = true;
 			}
 		}
@@ -73,20 +64,11 @@ public class Agent : MonoBehaviour
 		return toggle;
 	}
 
-	private void ReacToWalls()
+	private void OnTriggerEnter(Collider other)
 	{
-		if (transform.position.z < -17 || transform.position.z > 19)
+		if (other.CompareTag("Doorway"))
 		{
-			Vector3 target = transform.position;
-			target.z = (transform.position.z < -17) ? -18 : 20;
-			var rotation = Quaternion.LookRotation(transform.position - target);
-			var distance = transform.position.z - target.z;
-			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (rotateSpeed)));
+			Destroy(gameObject);
 		}
-	}
-	
-	private void Move(Vector3 vector3)
-	{
-		_rigidbody.AddForce(vector3);
 	}
 }

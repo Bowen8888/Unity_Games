@@ -2,13 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SocialAgentGenerator : MonoBehaviour
+public class AgentGenerator : MonoBehaviour
 {
 	public GameObject socialAgentPrefab;
 	public int socialAgentAmount;
+	public GameObject TravellerAgentPrefab;
+	public int TravellerAgentAmount;
 	
 	// Use this for initialization
 	void Start () {
+		
+		//Generate Traveller Agent
+		for (int i = 0; i < TravellerAgentAmount; i++)
+		{
+			Instantiate(TravellerAgentPrefab);
+		}
+		
+		//Generate Social Agent
 		for (int i = 0; i < socialAgentAmount; i++)
 		{
 			float xCord = Random.Range(-30, 30);
