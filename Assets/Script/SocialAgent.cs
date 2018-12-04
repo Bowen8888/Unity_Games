@@ -10,6 +10,7 @@ public class SocialAgent : MonoBehaviour {
 	public float rotateSpeed;  
 	private Vector3 destination;
 	public bool _talking = false;
+	private Vector3 talkingPosition;
 	
 	// Use this for initialization
 	void Start () {
@@ -32,7 +33,7 @@ public class SocialAgent : MonoBehaviour {
 	{
 		if (_talking)
 		{
-			_rigidbody.velocity = new Vector3();
+			transform.position = talkingPosition;
 			return;
 		}
 
@@ -48,6 +49,7 @@ public class SocialAgent : MonoBehaviour {
 			{
 				_rigidbody.velocity = new Vector3();
 				_talking = true;
+				talkingPosition = transform.position;
 			}
 			else if(distance < slowingRange)
 			{

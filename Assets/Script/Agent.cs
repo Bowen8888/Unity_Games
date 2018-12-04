@@ -48,19 +48,19 @@ public class Agent : MonoBehaviour
 	private bool ReactToObstacles()
 	{		
 		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
-//		GameObject[] travellers = GameObject.FindGameObjectsWithTag("Traveller");
+		GameObject[] travellers = GameObject.FindGameObjectsWithTag("SocialAgent");
 
-		return ReactToObstacles(obstacles);
+		return ReactToObstacles(obstacles, 5) || ReactToObstacles(travellers, 2);
 	}
 
-	private bool ReactToObstacles(GameObject[] obstacles)
+	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
 	{
 		bool toggle = false;
 				
 		foreach (var obstacle in obstacles)
 		{
 			float distance = Vector3.Distance(transform.position, obstacle.transform.position);
-			if (distance < 5)
+			if (distance < avoidDist)
 			{
 				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
 				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
