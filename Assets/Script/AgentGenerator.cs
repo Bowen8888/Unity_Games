@@ -14,10 +14,10 @@ public class AgentGenerator : MonoBehaviour
 	// Use this for initialization
 	void Start () {
 		
-		//Generate Traveller Agent
+		//Generate Traveler Agent
 		for (int i = 0; i < TravellerAgentAmount; i++)
 		{
-			Instantiate(TravellerAgentPrefab);
+			GenerateTravelerAgent();
 		}
 		
 		//Generate Social Agent
@@ -43,6 +43,11 @@ public class AgentGenerator : MonoBehaviour
 
 			Instantiate(prefab, spawnPos, Quaternion.identity);
 		}
+	}
+
+	public void GenerateTravelerAgent()
+	{
+		Instantiate(TravellerAgentPrefab);
 	}
 	
 	// Update is called once per frame

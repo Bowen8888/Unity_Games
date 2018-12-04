@@ -82,6 +82,7 @@ public class Agent : MonoBehaviour
 	{
 		if (other.CompareTag("Doorway"))
 		{
+			GameObject.FindGameObjectWithTag("AgentGenerator").GetComponent<AgentGenerator>().GenerateTravelerAgent();
 			Destroy(gameObject);
 		}
 	}

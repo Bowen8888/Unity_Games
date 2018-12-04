@@ -10,6 +10,7 @@ TagManager:
   - Doorway
   - WanderAgent
   - Traveler
+  - AgentGenerator
   layers:
   - Default
   - TransparentFX
