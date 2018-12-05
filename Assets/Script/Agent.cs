@@ -56,39 +56,6 @@ public class Agent : MonoBehaviour
 		return ReactToObstacles(obstacles, 5) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
 	}
 
-	private bool ReactToWall()
-	{
-		if (transform.position.z < -17)
-		{
-			var wallPosition = new Vector3(transform.position.x, 0.5f, -19.9f);
-			var distance = Vector3.Distance(transform.position, wallPosition);
-			var rotation = Quaternion.LookRotation(transform.position - wallPosition);
-			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
-			return true;
-		}
-
-		if (transform.position.z > 18)
-		{
-			
-			var wallPosition = new Vector3(transform.position.x, 0.5f, 21.31657f);
-			var distance = Vector3.Distance(transform.position, wallPosition);
-			var rotation = Quaternion.LookRotation(transform.position - wallPosition);
-			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
-			return true;
-		}
-
-		if (transform.position.x < -34)
-		{
-			var wallPosition = new Vector3(-37.58638f, 0.5f, transform.position.z);
-			var distance = Vector3.Distance(transform.position, wallPosition);
-			var rotation = Quaternion.LookRotation(transform.position - wallPosition);
-			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
-			return true;
-		}
-
-		return false;
-	}
-
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
 	{
 		bool toggle = false;
