@@ -9,8 +9,8 @@ public class SocialAgent : MonoBehaviour {
 	private float _speed;
 	private float _rotateSpeed;  
 	private Vector3 destination;
-	private float nextActionTime = 0.0f;
-	private float freeUntil = 2f;
+	private float nextActionTime;
+	private float freeUntil = 1f;
 	private SocialCircle _socialCircle;
 	
 	// Use this for initialization
@@ -20,6 +20,7 @@ public class SocialAgent : MonoBehaviour {
 		_rotateSpeed = 20;
 		_rigidbody = GetComponent<Rigidbody>();
 		_socialCircle = null;
+		nextActionTime = Random.Range(3, 10);
 	}
 	
 	// Update is called once per frame
@@ -35,14 +36,14 @@ public class SocialAgent : MonoBehaviour {
 	
 	private void FixedUpdate()
 	{
-//		if (_socialCircle != null)
-//		{
-//			if (Time.time > nextActionTime ) {
-//				_socialCircle.Leave();
-//				_socialCircle = null;
-//				freeUntil = Time.time + Random.Range(3,6);
-//			}
-//		}
+		if (_socialCircle != null)
+		{
+			if (Time.time > nextActionTime ) {
+				_socialCircle.Leave();
+				_socialCircle = null;
+				freeUntil = Time.time + Random.Range(3,6);
+			}
+		}
 
 		GameObject socialAgentAround = TalkingAvailableSocialAgentAround();
 
@@ -58,26 +59,8 @@ public class SocialAgent : MonoBehaviour {
 				_socialCircle = socialAgent._socialCircle;
 			}
 
+			nextActionTime = Time.time + Random.Range(3,10);
 			_socialCircle.Join();
-//			Vector3 desiredVelocity = socialAgentAround.transform.position - transform.position;
-//			var distance = desiredVelocity.magnitude;
-//			var slowingRange = 4;
-//
-//			if (distance < 2)
-//			{
-//				_rigidbody.velocity = new Vector3();
-//				_talking = true;
-//				nextActionTime = Time.time + Random.Range(3,6);
-//				talkingPosition = transform.position;
-//			}
-//			else if(distance < slowingRange)
-//			{
-//				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * _speed * distance/slowingRange ;
-//			}
-//			else
-//			{
-//				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * _speed;
-//			}
 		}
 
 		if (_socialCircle != null)
@@ -92,7 +75,7 @@ public class SocialAgent : MonoBehaviour {
 		if (_socialCircle!=null && Math.Abs(distance - _socialCircle.Radius) < 0.2)
 		{
 			_rigidbody.velocity = new Vector3();
-			nextActionTime = Time.time + Random.Range(3,6);
+
 			if (_socialCircle.MemberCount == 1)
 			{
 				_socialCircle.Leave();
@@ -153,7 +136,7 @@ public class SocialAgent : MonoBehaviour {
 		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
 		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("SocialAgent");
 
-		return ReactToObstacles(socialAgents,1) || ReactToObstacles(obstacles, 5) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelerAgents, 2) ;
+		return ((_socialCircle!=null)?ReactToObstacles(socialAgents,1):ReactToObstacles(socialAgents,2)) || ReactToObstacles(obstacles, 5) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelerAgents, 2) ;
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
