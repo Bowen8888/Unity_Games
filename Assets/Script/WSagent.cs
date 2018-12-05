@@ -61,7 +61,25 @@ public class WSagent : MonoBehaviour
 			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed));
 		}
 		
-		_rigidbody.velocity = transform.forward * _speed;
+		var distance = Vector3.Distance(transform.position, destination);
+		var slowingRange = 4;
+		
+		if (_target != null)
+		{
+			_rigidbody.velocity = transform.forward * _speed;
+		}
+		else if ((distance < 0.1 || Physics.CheckSphere(destination, 3)))
+		{
+			UpdateDestination();
+		}
+		else if(distance < slowingRange)
+		{
+			_rigidbody.velocity = transform.forward * _speed * distance/slowingRange;
+		}
+		else
+		{
+			_rigidbody.velocity = transform.forward * _speed;
+		}
 	}
 
 	private bool ReactToObstacles()
