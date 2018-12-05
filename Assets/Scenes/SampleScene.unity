@@ -145,7 +145,7 @@ MonoBehaviour:
   SocialAgentAmount: 10
   TravellerAgentPrefab: {fileID: 1332659736153406, guid: aa0b4a8681e774f2ea9c4888f1e8c61d,
     type: 2}
-  TravellerAgentAmount: 10
+  TravellerAgentAmount: 20
   WanderAgentPrefab: {fileID: 1249240370757862, guid: 853b474a7a13c4e9499c65034988e6f1,
     type: 2}
   WanderAgentAmount: 10
@@ -396,7 +396,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4853646406769794, guid: 87eccbf809c664dae8b4ab3400f6f139, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -37.5
+      value: -37.2
       objectReference: {fileID: 0}
     - target: {fileID: 4853646406769794, guid: 87eccbf809c664dae8b4ab3400f6f139, type: 2}
       propertyPath: m_LocalPosition.y
@@ -626,7 +626,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4853646406769794, guid: 87eccbf809c664dae8b4ab3400f6f139, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -37.5
+      value: -37.2
       objectReference: {fileID: 0}
     - target: {fileID: 4853646406769794, guid: 87eccbf809c664dae8b4ab3400f6f139, type: 2}
       propertyPath: m_LocalPosition.y
@@ -788,7 +788,7 @@ MonoBehaviour:
     type: 2}
   obstacleContainerPrefab: {fileID: 1043600502370822, guid: f58476377d72b41ce8685afada984747,
     type: 2}
-  N: 8
+  N: 15
 --- !u!4 &1148462167
 Transform:
   m_ObjectHideFlags: 0

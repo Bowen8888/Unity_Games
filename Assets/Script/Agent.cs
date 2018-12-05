@@ -53,7 +53,7 @@ public class Agent : MonoBehaviour
 		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
 		GameObject[] travelers = GameObject.FindGameObjectsWithTag("Traveler");
 
-		return ReactToWall() || ReactToObstacles(obstacles, 5) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
+		return ReactToObstacles(obstacles, 5) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
 	}
 
 	private bool ReactToWall()
@@ -77,12 +77,23 @@ public class Agent : MonoBehaviour
 			return true;
 		}
 
+		if (transform.position.x < -34)
+		{
+			var wallPosition = new Vector3(-37.58638f, 0.5f, transform.position.z);
+			var distance = Vector3.Distance(transform.position, wallPosition);
+			var rotation = Quaternion.LookRotation(transform.position - wallPosition);
+			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
+			return true;
+		}
+
 		return false;
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
 	{
 		bool toggle = false;
+		float minDist = avoidDist + 1;
+		Vector3 resultingVector = new Vector3();
 				
 		foreach (var obstacle in obstacles)
 		{
@@ -94,10 +105,56 @@ public class Agent : MonoBehaviour
 			float distance = Vector3.Distance(transform.position, obstacle.transform.position);
 			if (distance < avoidDist)
 			{
-				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
-				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed*2/distance));
+				if (minDist > distance)
+				{
+					minDist = distance;
+					resultingVector = transform.position - obstacle.transform.position;
+					toggle = true;
+				}
+			}
+		}
+		
+		if (transform.position.z < -17)
+		{
+			var wallPosition = new Vector3(transform.position.x, 0.5f, -19.9f);
+			var distance = Vector3.Distance(transform.position, wallPosition);
+			if (minDist > distance)
+			{
+				minDist = distance;
+				resultingVector = transform.position - wallPosition;
 				toggle = true;
 			}
+		}
+
+		if (transform.position.z > 18)
+		{
+			
+			var wallPosition = new Vector3(transform.position.x, 0.5f, 21.31657f);
+			var distance = Vector3.Distance(transform.position, wallPosition);
+			if (minDist > distance)
+			{
+				minDist = distance;
+				resultingVector = transform.position - wallPosition;
+				toggle = true;
+			}
+		}
+
+		if (transform.position.x < -34)
+		{
+			var wallPosition = new Vector3(-37.58638f, 0.5f, transform.position.z);
+			var distance = Vector3.Distance(transform.position, wallPosition);
+			if (minDist > distance)
+			{
+				minDist = distance;
+				resultingVector = transform.position - wallPosition;
+				toggle = true;
+			}
+		}
+
+		if (toggle)
+		{
+			var rotation = Quaternion.LookRotation(resultingVector);
+			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed*2/minDist));
 		}
 
 		return toggle;
