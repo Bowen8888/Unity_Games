@@ -53,7 +53,31 @@ public class Agent : MonoBehaviour
 		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
 		GameObject[] travelers = GameObject.FindGameObjectsWithTag("Traveler");
 
-		return ReactToObstacles(obstacles, 5) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
+		return ReactToWall() || ReactToObstacles(obstacles, 5) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
+	}
+
+	private bool ReactToWall()
+	{
+		if (transform.position.z < -17)
+		{
+			var wallPosition = new Vector3(transform.position.x, 0.5f, -19.9f);
+			var distance = Vector3.Distance(transform.position, wallPosition);
+			var rotation = Quaternion.LookRotation(transform.position - wallPosition);
+			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
+			return true;
+		}
+
+		if (transform.position.z > 18)
+		{
+			
+			var wallPosition = new Vector3(transform.position.x, 0.5f, 21.31657f);
+			var distance = Vector3.Distance(transform.position, wallPosition);
+			var rotation = Quaternion.LookRotation(transform.position - wallPosition);
+			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
+			return true;
+		}
+
+		return false;
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
@@ -83,7 +107,7 @@ public class Agent : MonoBehaviour
 	{
 		if (other.CompareTag("Doorway"))
 		{
-//			GameObject.FindGameObjectWithTag("AgentGenerator").GetComponent<AgentGenerator>().GenerateTravelerAgent();
+			GameObject.FindGameObjectWithTag("AgentGenerator").GetComponent<AgentGenerator>().GenerateTravelerAgent();
 			Destroy(gameObject);
 		}
 	}
