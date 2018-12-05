@@ -142,13 +142,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SocialAgentPrefab: {fileID: 1223911610866704, guid: f36150ea2821d45da89f87399a6dcd33,
     type: 2}
-  SocialAgentAmount: 2
+  SocialAgentAmount: 10
   TravellerAgentPrefab: {fileID: 1332659736153406, guid: aa0b4a8681e774f2ea9c4888f1e8c61d,
     type: 2}
-  TravellerAgentAmount: 0
+  TravellerAgentAmount: 10
   WanderAgentPrefab: {fileID: 1249240370757862, guid: 853b474a7a13c4e9499c65034988e6f1,
     type: 2}
-  WanderAgentAmount: 0
+  WanderAgentAmount: 10
 --- !u!4 &75432734
 Transform:
   m_ObjectHideFlags: 0
@@ -880,7 +880,7 @@ MonoBehaviour:
     type: 2}
   obstacleContainerPrefab: {fileID: 1043600502370822, guid: f58476377d72b41ce8685afada984747,
     type: 2}
-  N: 6
+  N: 20
 --- !u!4 &1148462167
 Transform:
   m_ObjectHideFlags: 0

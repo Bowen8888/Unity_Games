@@ -13,9 +13,10 @@ public class ObstacleGenerator : MonoBehaviour
 	void Awake ()
 	{
 		int count = 0;
+		int t = 0;
 		while (count < N)
 		{
-			float xCord = Random.Range(-20, 20);
+			float xCord = Random.Range(-23, 25);
 			float zCord = Random.Range(-20, 20);
 			bool canPlace = true;
 			GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
@@ -34,8 +35,7 @@ public class ObstacleGenerator : MonoBehaviour
 				count++;
 			}
 
-			float time = Time.time;
-			if (time > 5)
+			if (t++ > 1000)
 			{
 				break;
 			}
