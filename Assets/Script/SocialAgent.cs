@@ -45,7 +45,7 @@ public class SocialAgent : MonoBehaviour {
 			return;
 		}
 
-		GameObject socialAgentAround = SocialAgentAround();
+		GameObject socialAgentAround = TalkingAvailableSocialAgentAround();
 
 		if (socialAgentAround != null && Time.time > freeUntil)
 		{
@@ -95,7 +95,7 @@ public class SocialAgent : MonoBehaviour {
 		}
 	}
 
-	private GameObject SocialAgentAround()
+	private GameObject TalkingAvailableSocialAgentAround()
 	{
 		var viewRange = 5;
 		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("SocialAgent");
@@ -104,7 +104,7 @@ public class SocialAgent : MonoBehaviour {
 			if (!socialAgent.Equals(gameObject))
 			{
 				var distance = Vector3.Distance(transform.position, socialAgent.transform.position);
-				if (distance < viewRange)
+				if (distance < viewRange && Time.time > socialAgent.GetComponent<SocialAgent>().freeUntil)
 				{
 					return socialAgent;
 				}
