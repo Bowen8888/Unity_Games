@@ -10,7 +10,9 @@ public class SocialAgent : MonoBehaviour {
 	private float _rotateSpeed;  
 	private Vector3 destination;
 	public bool _talking = false;
-	private Vector3 talkingPosition;
+	private Vector3 talkingPosition; 
+	private float nextActionTime = 0.0f;
+	private float freeUntil = 5f;
 	
 	// Use this for initialization
 	void Start () {
@@ -36,21 +38,26 @@ public class SocialAgent : MonoBehaviour {
 		if (_talking)
 		{
 			transform.position = talkingPosition;
+			if (Time.time > nextActionTime ) {
+				_talking = false;
+				freeUntil = Time.time + Random.Range(3,6);
+			}
 			return;
 		}
 
 		GameObject socialAgentAround = SocialAgentAround();
-		
-		if (socialAgentAround != null)
+
+		if (socialAgentAround != null && Time.time > freeUntil)
 		{
 			Vector3 desiredVelocity = socialAgentAround.transform.position - transform.position;
 			var distance = desiredVelocity.magnitude;
 			var slowingRange = 4;
-		
+
 			if (distance < 2)
 			{
 				_rigidbody.velocity = new Vector3();
 				_talking = true;
+				nextActionTime = Time.time + Random.Range(8,20);
 				talkingPosition = transform.position;
 			}
 			else if(distance < slowingRange)
