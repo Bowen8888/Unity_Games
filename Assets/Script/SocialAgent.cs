@@ -115,14 +115,28 @@ public class SocialAgent : MonoBehaviour {
 	}
 
 	private bool ReactToObstacles()
+	{		
+		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+		GameObject[] travelerAgents = GameObject.FindGameObjectsWithTag("Traveler");
+		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
+		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("SocialAgent");
+
+		return ReactToObstacles(obstacles, 5) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelerAgents, 2) || ReactToObstacles(socialAgents,2);
+	}
+
+	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
 	{
 		bool toggle = false;
-		
-		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
+				
 		foreach (var obstacle in obstacles)
 		{
+			if (obstacle == gameObject)
+			{
+				continue;
+			}
+			
 			float distance = Vector3.Distance(transform.position, obstacle.transform.position);
-			if (distance < 5)
+			if (distance < avoidDist)
 			{
 				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
 				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
