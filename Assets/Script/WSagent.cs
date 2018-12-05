@@ -87,9 +87,8 @@ public class WSagent : MonoBehaviour
 		GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("SocialAgent");
 		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
-		ReactToWall();
 
-		return ReactToObstacles(obstacles, 7) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(socialAgents, 2);
+		return ReactToObstacles(obstacles, 5) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(socialAgents, 2);
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
@@ -113,20 +112,6 @@ public class WSagent : MonoBehaviour
 		}
 
 		return toggle;
-	}
-
-	private void ReactToWall()
-	{
-		RaycastHit hit;
-		if (Physics.Raycast(transform.position, transform.forward, out hit, 5))
-		{
-			if (hit.collider.CompareTag("Wall"))
-			{
-				var rotation = Quaternion.LookRotation(transform.position - hit.point);
-				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/hit.distance));
-				Debug.DrawLine(transform.position, hit.point, Color.red);
-			}
-		}
 	}
 	
 	private void CheckTravelerAround()
