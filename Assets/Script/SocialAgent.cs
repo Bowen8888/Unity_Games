@@ -9,10 +9,9 @@ public class SocialAgent : MonoBehaviour {
 	private float _speed;
 	private float _rotateSpeed;  
 	private Vector3 destination;
-	private bool _talking;
-	private Vector3 talkingPosition; 
 	private float nextActionTime = 0.0f;
 	private float freeUntil = 2f;
+	private SocialCircle _socialCircle;
 	
 	// Use this for initialization
 	void Start () {
@@ -20,6 +19,7 @@ public class SocialAgent : MonoBehaviour {
 		_speed = Random.Range(5, 10);
 		_rotateSpeed = 20;
 		_rigidbody = GetComponent<Rigidbody>();
+		_socialCircle = null;
 	}
 	
 	// Update is called once per frame
@@ -35,58 +35,90 @@ public class SocialAgent : MonoBehaviour {
 	
 	private void FixedUpdate()
 	{
-		if (_talking)
-		{
-			transform.position = talkingPosition;
-			if (Time.time > nextActionTime ) {
-				_talking = false;
-				freeUntil = Time.time + Random.Range(3,6);
-			}
-			return;
-		}
+//		if (_socialCircle != null)
+//		{
+//			if (Time.time > nextActionTime ) {
+//				_socialCircle.Leave();
+//				_socialCircle = null;
+//				freeUntil = Time.time + Random.Range(3,6);
+//			}
+//		}
 
 		GameObject socialAgentAround = TalkingAvailableSocialAgentAround();
 
-		if (socialAgentAround != null && Time.time > freeUntil)
+		if (socialAgentAround != null && _socialCircle == null && Time.time > freeUntil)
 		{
-			Vector3 desiredVelocity = socialAgentAround.transform.position - transform.position;
-			var distance = desiredVelocity.magnitude;
-			var slowingRange = 4;
-
-			if (distance < 2)
+			SocialAgent socialAgent = socialAgentAround.GetComponent<SocialAgent>();
+			if (socialAgent._socialCircle == null)
 			{
-				_rigidbody.velocity = new Vector3();
-				_talking = true;
-				nextActionTime = Time.time + Random.Range(3,6);
-				talkingPosition = transform.position;
-			}
-			else if(distance < slowingRange)
-			{
-				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * _speed * distance/slowingRange ;
+				_socialCircle = new SocialCircle(transform.position + Vector3.Normalize(transform.forward));
 			}
 			else
 			{
-				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * _speed;
+				_socialCircle = socialAgent._socialCircle;
+			}
+
+			_socialCircle.Join();
+//			Vector3 desiredVelocity = socialAgentAround.transform.position - transform.position;
+//			var distance = desiredVelocity.magnitude;
+//			var slowingRange = 4;
+//
+//			if (distance < 2)
+//			{
+//				_rigidbody.velocity = new Vector3();
+//				_talking = true;
+//				nextActionTime = Time.time + Random.Range(3,6);
+//				talkingPosition = transform.position;
+//			}
+//			else if(distance < slowingRange)
+//			{
+//				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * _speed * distance/slowingRange ;
+//			}
+//			else
+//			{
+//				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * _speed;
+//			}
+		}
+
+		if (_socialCircle != null)
+		{
+			destination = _socialCircle.Center;
+		}
+		
+		Vector3 desiredVelocity = destination - transform.position;
+		var distance = desiredVelocity.magnitude;
+		var slowingRange = 4;
+
+		if (_socialCircle!=null && Math.Abs(distance - _socialCircle.Radius) < 0.2)
+		{
+			_rigidbody.velocity = new Vector3();
+			nextActionTime = Time.time + Random.Range(3,6);
+			if (_socialCircle.MemberCount == 1)
+			{
+				_socialCircle.Leave();
+				_socialCircle = null;
+			}
+		}
+		else if (distance < 0.5 || Physics.CheckSphere(destination, 3) && _socialCircle == null)
+		{
+			UpdateDestination();
+		}
+		else if(distance < slowingRange)
+		{
+			if (_socialCircle != null && distance < _socialCircle.Radius)
+			{
+				_rigidbody.velocity = -transform.forward * _speed ;
+			}
+			else
+			{
+				_rigidbody.velocity = transform.forward * _speed * distance/slowingRange;	
 			}
 		}
 		else
 		{
-			var distance = Vector3.Distance(transform.position, destination);
-			var slowingRange = 4;
-		
-			if (distance < 0.5 || Physics.CheckSphere(destination, 3))
-			{
-				UpdateDestination();
-			}
-			else if(distance < slowingRange)
-			{
-				_rigidbody.velocity = transform.forward * _speed * distance/slowingRange ;
-			}
-			else
-			{
-				_rigidbody.velocity = transform.forward * _speed;
-			}
+			_rigidbody.velocity = transform.forward * _speed;
 		}
+		
 
 		if (!ReactToObstacles())
 		{
@@ -121,7 +153,7 @@ public class SocialAgent : MonoBehaviour {
 		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
 		GameObject[] socialAgents = GameObject.FindGameObjectsWithTag("SocialAgent");
 
-		return ReactToObstacles(obstacles, 5) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelerAgents, 2) || ReactToObstacles(socialAgents,2);
+		return ReactToObstacles(socialAgents,1) || ReactToObstacles(obstacles, 5) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelerAgents, 2) ;
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
