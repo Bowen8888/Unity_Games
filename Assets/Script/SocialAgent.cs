@@ -71,11 +71,12 @@ public class SocialAgent : MonoBehaviour {
 		Vector3 desiredVelocity = destination - transform.position;
 		var distance = desiredVelocity.magnitude;
 		var slowingRange = 4;
-
+		var facingCenter = false;
+		
 		if (_socialCircle!=null && Math.Abs(distance - _socialCircle.Radius) < 0.2)
 		{
 			_rigidbody.velocity = new Vector3();
-
+			facingCenter = true;
 			if (_socialCircle.MemberCount == 1)
 			{
 				_socialCircle.Leave();
@@ -103,7 +104,7 @@ public class SocialAgent : MonoBehaviour {
 		}
 		
 
-		if (!ReactToObstacles())
+		if (facingCenter || !ReactToObstacles())
 		{
 			var rotation = Quaternion.LookRotation(destination - transform.position);
 			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed));
