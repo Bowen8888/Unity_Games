@@ -22,7 +22,7 @@ public class ObstacleGenerator : MonoBehaviour
 			GameObject[] obstacles = GameObject.FindGameObjectsWithTag("Obstacle");
 			foreach (var obstacle in obstacles)
 			{
-				if (Vector3.Distance(obstacle.transform.position, new Vector3(xCord, 2, zCord)) < 12)
+				if (Vector3.Distance(obstacle.transform.position, new Vector3(xCord, 2, zCord)) < 11)
 				{
 					canPlace = false;
 					break;
@@ -74,8 +74,8 @@ public class ObstacleGenerator : MonoBehaviour
 		if (rnd.NextDouble() < 0.5)
 		{
 			GameObject side = Instantiate(objectPrefab,new Vector3(0,2,0), Quaternion.identity);
-			float sideWidth = (float) (rnd.NextDouble() * 3 + 2);
-			float sideHeight = (float) (rnd.NextDouble() * 3 + 2);
+			float sideWidth = (float) (rnd.NextDouble() * 3 + 1);
+			float sideHeight = (float) (rnd.NextDouble() * 3 + 1);
 			side.transform.localScale = new Vector3(sideWidth, 4, sideHeight);
 			bool positive = rnd.NextDouble() < 0.5;
 			float shiftOffset = (float) rnd.NextDouble();

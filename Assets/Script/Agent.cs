@@ -10,6 +10,7 @@ public class Agent : MonoBehaviour
 	private bool _chosenGoal1;
 	private float _nextActionTime = 0.0f;
 	private float _period = 5;
+	private int fleeIgnore = 0;
 
 	private Rigidbody _rigidbody;
 	// Use this for initialization
@@ -52,7 +53,7 @@ public class Agent : MonoBehaviour
 		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
 		GameObject[] travelers = GameObject.FindGameObjectsWithTag("Traveler");
 
-		return ReactToObstacles(obstacles, 5) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
+		return ReactToObstacles(obstacles, 4) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
