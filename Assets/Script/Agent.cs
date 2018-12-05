@@ -53,7 +53,7 @@ public class Agent : MonoBehaviour
 		GameObject[] wanderAgents = GameObject.FindGameObjectsWithTag("WanderAgent");
 		GameObject[] travelers = GameObject.FindGameObjectsWithTag("Traveler");
 
-		return ReactToObstacles(obstacles, 4) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
+		return ReactToObstacles(obstacles, 5) || ReactToObstacles(socialAgents, 2) || ReactToObstacles(wanderAgents, 2) || ReactToObstacles(travelers, 2);
 	}
 
 	private bool ReactToObstacles(GameObject[] obstacles, float avoidDist)
@@ -71,7 +71,7 @@ public class Agent : MonoBehaviour
 			if (distance < avoidDist)
 			{
 				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
-				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
+				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed*2/distance));
 				toggle = true;
 			}
 		}
@@ -83,7 +83,7 @@ public class Agent : MonoBehaviour
 	{
 		if (other.CompareTag("Doorway"))
 		{
-			GameObject.FindGameObjectWithTag("AgentGenerator").GetComponent<AgentGenerator>().GenerateTravelerAgent();
+//			GameObject.FindGameObjectWithTag("AgentGenerator").GetComponent<AgentGenerator>().GenerateTravelerAgent();
 			Destroy(gameObject);
 		}
 	}
