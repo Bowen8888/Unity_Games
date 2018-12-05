@@ -6,8 +6,8 @@ using Random = UnityEngine.Random;
 
 public class SocialAgent : MonoBehaviour {
 	private Rigidbody _rigidbody;
-	public float speed;
-	public float rotateSpeed;  
+	private float _speed;
+	private float _rotateSpeed;  
 	private Vector3 destination;
 	public bool _talking = false;
 	private Vector3 talkingPosition;
@@ -15,6 +15,8 @@ public class SocialAgent : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		UpdateDestination();
+		_speed = Random.Range(5, 10);
+		_rotateSpeed = 20;
 		_rigidbody = GetComponent<Rigidbody>();
 	}
 	
@@ -53,11 +55,11 @@ public class SocialAgent : MonoBehaviour {
 			}
 			else if(distance < slowingRange)
 			{
-				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * speed * distance/slowingRange ;
+				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * _speed * distance/slowingRange ;
 			}
 			else
 			{
-				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * speed;
+				_rigidbody.velocity = Vector3.Normalize(desiredVelocity) * _speed;
 			}
 		}
 		else
@@ -71,18 +73,18 @@ public class SocialAgent : MonoBehaviour {
 			}
 			else if(distance < slowingRange)
 			{
-				_rigidbody.velocity = transform.forward * speed * distance/slowingRange ;
+				_rigidbody.velocity = transform.forward * _speed * distance/slowingRange ;
 			}
 			else
 			{
-				_rigidbody.velocity = transform.forward * speed;
+				_rigidbody.velocity = transform.forward * _speed;
 			}
 		}
 
 		if (!ReactToObstacles())
 		{
 			var rotation = Quaternion.LookRotation(destination - transform.position);
-			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,rotateSpeed));
+			_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed));
 		}
 	}
 
@@ -116,7 +118,7 @@ public class SocialAgent : MonoBehaviour {
 			if (distance < 5)
 			{
 				var rotation = Quaternion.LookRotation(transform.position - obstacle.transform.position);
-				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,(float) (rotateSpeed/Math.Pow(2,distance/4))));
+				_rigidbody.MoveRotation(Quaternion.RotateTowards(transform.rotation,rotation,_rotateSpeed/distance));
 				toggle = true;
 			}
 		}
